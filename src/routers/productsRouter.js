@@ -1,39 +1,46 @@
 import { Router } from 'express';
-import createError from 'http-errors';
-import { getAllProducts, getProductById } from '../services/products.js';
 import { isValidId } from '../middlewares/isValidId.js';
+import {
+  addProductsController,
+  deleteProductsController,
+  getAllProductsController,
+  getProductByIdController,
+  updateProductsController,
+} from '../controllers/products.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import { validateBody } from '../middlewares/validateBody.js';
+import {
+  createProductsSchema,
+  updateProductsSchema,
+} from '../validate/productsSchemas.js';
 
 const router = Router();
 
-router.get('/products', async (req, res, next) => {
-  try {
-    const products = await getAllProducts();
-    res.status(200).json({
-      status: 200,
-      message: 'Successfully found products!',
-      data: products,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.get('/products', ctrlWrapper(getAllProductsController));
 
-router.get('/products/:productId', isValidId, async (req, res, next) => {
-  try {
-    const { productId } = req.params;
+router.get(
+  '/products/:productId',
+  isValidId,
+  ctrlWrapper(getProductByIdController),
+);
 
-    const product = await getProductById(productId);
+router.post(
+  '/products',
+  validateBody(createProductsSchema),
+  ctrlWrapper(addProductsController),
+);
 
-    if (!product) return next(createError(404, 'Product not found'));
+router.patch(
+  '/products/:productId',
+  isValidId,
+  validateBody(updateProductsSchema),
+  ctrlWrapper(updateProductsController),
+);
 
-    res.status(200).json({
-      status: 200,
-      message: `Successfully found product with id ${productId}!`,
-      data: product,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+router.delete(
+  '/products/:productId',
+  isValidId,
+  ctrlWrapper(deleteProductsController),
+);
 
 export default router;
