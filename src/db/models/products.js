@@ -23,6 +23,7 @@ const productsSchema = new Schema(
   },
   {
     timestamps: true,
+    versionKey: false,
   },
 );
 
