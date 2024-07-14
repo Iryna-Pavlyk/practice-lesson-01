@@ -13,8 +13,11 @@ import {
   createProductsSchema,
   updateProductsSchema,
 } from '../validate/productsSchemas.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const router = Router();
+
+router.use(authenticate);
 
 router.get('/products', ctrlWrapper(getAllProductsController));
 

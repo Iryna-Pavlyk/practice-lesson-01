@@ -40,7 +40,7 @@ export const getProductByIdController = async (req, res) => {
 };
 
 export const addProductsController = async (req, res) => {
-  const product = await addProducts(req.body);
+  const product = await addProducts({ ...req.body, userId: req.user._id });
 
   res.status(201).json({
     status: 201,

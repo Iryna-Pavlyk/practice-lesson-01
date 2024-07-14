@@ -6,7 +6,6 @@ export const getAllProducts = async ({
   sortBy = '_id',
   filter = {},
 }) => {
-  console.log('🚀 ~ filter:', filter);
   const productsQuery = Product.find();
 
   if (filter.category) {
@@ -14,20 +13,17 @@ export const getAllProducts = async ({
   }
 
   if (filter.minPrice) {
-    console.log('🚀 ~ filter.minPrice:', filter.minPrice);
-    productsQuery.where('minPrice').gte(filter.minPrice);
+    productsQuery.where('price').gte(filter.minPrice);
   }
 
   if (filter.maxPrice) {
-    console.log('🚀 ~ filter.maxPrice:', filter.maxPrice);
-    productsQuery.where('maxPrice').lte(filter.maxPrice);
+    productsQuery.where('price').lte(filter.maxPrice);
   }
 
   const products = await Product.find()
     .merge(productsQuery)
     .sort({ [sortBy]: sortOrder })
     .exec();
-
   return products;
 };
 

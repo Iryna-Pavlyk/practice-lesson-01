@@ -4,6 +4,8 @@ import { env } from './utils/env.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import productsRouter from './routers/productsRouter.js';
+import authRouter from './routers/authRouter.js';
+import cookieParser from 'cookie-parser';
 
 const PORT = Number(env('PORT', '3000'));
 
@@ -12,7 +14,9 @@ export const setupServer = () => {
 
   app.use(express.json());
   app.use(cors());
+  app.use(cookieParser());
 
+  app.use(authRouter);
   app.use(productsRouter);
 
   app.use('*', notFoundHandler);

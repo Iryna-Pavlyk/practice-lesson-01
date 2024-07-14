@@ -10,23 +10,20 @@ const categoryFilter = (category) => {
 
 const parseNumber = (number) => {
   const isString = typeof number === 'string';
-  console.log('🚀 ~ parseNumber ~ isString:', isString);
-  console.log(typeof number);
   if (!isString) return;
 
   const parsedNumber = parseInt(number);
-  console.log('🚀 ~ parseNumber ~ parsedNumber:', parsedNumber);
   if (Number.isNaN(parsedNumber)) return;
 
   return parsedNumber;
 };
 
 export const parseFilterParams = (query) => {
-  const { category, minNumber, maxNumber } = query;
+  const { category, minPrice, maxPrice } = query;
 
   const parsedCategory = categoryFilter(category);
-  const parsedMinNumber = parseNumber(minNumber);
-  const parsedMaxNumber = parseNumber(maxNumber);
+  const parsedMinNumber = parseNumber(minPrice);
+  const parsedMaxNumber = parseNumber(maxPrice);
 
   return {
     category: parsedCategory,
